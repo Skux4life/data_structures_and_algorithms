@@ -3,6 +3,7 @@ class TrieNode:
     def __init__(self) -> None:
         self.children = {}
 
+
 class Trie:
 
     def __init__(self) -> None:
@@ -42,7 +43,7 @@ class Trie:
         currentNode.children['*'] = None
 
     def collectAllWords(self, node=None, word='', words=[]):
-        
+
         # current node is the node passed in as the first paramter
         # or the root node if none is provided
         currentNode = node or self.root
@@ -64,3 +65,23 @@ class Trie:
         if not currentNode:
             return None
         return self.collectAllWords(currentNode)
+
+    def printKeys(self, node=None):
+        currentNode = node or self.root
+
+        for key, childNode in currentNode.children.items():
+            print(key)
+            if key != '*':
+                self.printKeys(childNode.children)
+
+    def autocorrect(self, text):
+        currentNode = self.root
+        suggestion = ''
+        for char in text:
+            if currentNode.children.get(char):
+                suggestion += char
+                currentNode = currentNode.children.get(char)
+            else:
+                # Collect all suffix with the prefix we've found so far
+                return suggestion + self.collectAllWords(currentNode)[0]
+        return suggestion
