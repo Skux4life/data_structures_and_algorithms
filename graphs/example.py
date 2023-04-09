@@ -15,6 +15,15 @@ class Vertex:
         # undirected mutual addition
         vertex.adjacent_vertices.append(self)
 
+class WeightedVertex:
+
+    def __init__(self, value) -> None:
+        self.value = value
+        self.adjacent_vertices = {}
+
+    def add_adjacent_vertex(self, vertex, weight):
+        self.adjacent_vertices[vertex] = weight
+
 def dfs(vertex, search_value, visited_vertices={}):
     if vertex.value == search_value:
         return vertex
