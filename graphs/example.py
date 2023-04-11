@@ -41,6 +41,24 @@ def dfs(vertex, search_value, visited_vertices={}):
         if searching_for_vertex:
             return searching_for_vertex
     return None
+
+
+def bfs(starting_vertex, search_value):
+    visited_vertices = {}
+    visited_vertices[starting_vertex.value] = True
+    queue = deque()
+    queue.append(starting_vertex)
+
+    while len(queue) > 0:
+        current_vertex = queue.pop()
+        if current_vertex.value == search_value:
+            return current_vertex
+        
+        for vertex in current_vertex.adjacent_vertices:
+            if not visited_vertices.get(vertex.value):
+                visited_vertices[vertex.value] = True
+                queue.append(vertex)
+    return None
         
     
 def bfs_traverse(starting_vertex):
@@ -67,3 +85,34 @@ def dfs_traverse(vertex, visited_vertices={}):
         if visited_vertices[v]:
             continue
         dfs_traverse(v, visited_vertices)
+
+
+def shortest_path_for_unweighted_graph(starting_vertex, destination_vertex, visited_vertices={}):
+    queue = deque()
+
+    previous_vertex_table = {}
+
+    # Use breadth first search
+    visited_vertices[starting_vertex.value] = True
+    queue.append(starting_vertex)
+
+    while len(queue) > 1:
+        current_vertex = queue.pop()
+        
+        for vertex in current_vertex.adjacent_vertices:
+            if not visited_vertices.get(vertex.value):
+                visited_vertices[vertex.value] = True
+                queue.append(vertex)
+                # Store in the previous vertex table the adjacent vertex as key and current vertex as value
+                previous_vertex_table[vertex.value] = current_vertex.value
+    
+    shortest_path = []
+    current_vertex_value = destination_vertex.value
+    while current_vertex_value != starting_vertex.value:
+        shortest_path.append(current_vertex_value)
+        current_vertex_value = previous_vertex_table[current_vertex_value]
+    shortest_path.append(starting_vertex)
+    return shortest_path[::-1]
+
+    # Could adjust above so that the loop breaks once the shortest path is found rather than traversing the whole graph
+        
